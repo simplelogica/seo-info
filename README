@@ -3,3 +3,42 @@ A common feature in current web apps is to have an architecture oriented towards
 Unfortunately, SEO does not always fit smoothly in our architectures and there's no right place to put all the required information for a page.
 
 This plugin tries to isolate the required features to have fully SEO equiped application so you can plug it on a web application without working too much.
+
+-- HOW TO ATTACH SEO INFORMATION TO A MODEL
+
+To attach SEO Information to a model you sholud include the following code in your class:
+
+  has_seo options
+
+This creates a relationship between your model and SeoInfo model and you can request the SEO information just by
+
+  object.seo_info
+
+'option' is a Hash which allows you to customize a little bit the relationship:
+
+  - hooks: It's another Hash that allows you to define a default value for your SEO data.
+
+Imagine you have a Product model and you want that, regarding to its seo information, the h1 element is exactly the product name but you want to specify the seo description (for meta label). You could do:
+
+    class Product
+      
+      has_seo :hooks => {:h1 => :name}
+
+    end
+
+This way *h1* will have the value of name *attribute* if it's not forced to be different.
+
+What if I want my *title* meta is 'My little shop >> ' followed by the name of the product? In this Hash we can pass the name of a method and the default value would be whatever the result of this method is:
+
+    class Product
+      
+      has_seo :hooks => {:h1 => :name, :title => :official_title}
+
+      def official_title
+        "My little shop >> #{self.name}"
+      end
+
+    end
+
+
+  - default: It's a boolean attribute that defines if *object.seo_info* must return always a SeoInfo object even if it was not created on the database. It's quite useful.
