@@ -1,0 +1,5 @@
+A common feature in current web apps is to have an architecture oriented towards SEO (you know, Search Engine Optimization).
+
+Unfortunately, SEO does not always fit smoothly in our architectures and there's no right place to put all the required information for a page.
+
+This plugin tries to isolate the required features to have fully SEO equiped application so you can plug it on a web application without working too much.
