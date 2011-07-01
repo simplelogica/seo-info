@@ -15,4 +15,10 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
   @@classes = []
   cattr_accessor :classes
 
+  [:h1, :title, :description, :footer].each do |field|
+    define_method field do
+      read_attribute(field) || (seoable.blank? ? nil : seoable.send(:"seo_#{field.to_s}"))
+    end
+  end
+
 end
