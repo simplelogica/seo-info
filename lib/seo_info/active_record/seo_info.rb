@@ -21,4 +21,8 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
     end
   end
 
+  def canonical_url
+    (seoable.nil? or not(seoable.respond_to?(:canonical_url))) ? url : seoable.canonical_url
+  end
+
 end
