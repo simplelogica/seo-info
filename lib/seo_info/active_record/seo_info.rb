@@ -8,7 +8,7 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
 
   def has_seoable_or_url
     if seoable.nil? and url.blank?
-      self.errors.add_to_base :no_resource_seoizado
+      self.errors.add_to_base "no_resource_seoizado"
     end
   end
 
