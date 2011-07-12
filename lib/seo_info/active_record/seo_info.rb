@@ -15,9 +15,17 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
   @@classes = []
   cattr_accessor :classes
 
-  [:h1, :title, :description, :footer].each do |field|
+  def self.seo_attribute_names
+    self.new.attribute_names - ["created_at", "seoable_id", "seoable_type", "updated_at"]
+  end
+
+  self.seo_attribute_names.each do |field|
     define_method field do
       read_attribute(field) || (seoable.blank? ? nil : seoable.send(:"seo_#{field.to_s}"))
+    end
+
+    define_method "default_#{field}" do
+      (seoable.blank? ? nil : seoable.send(:"seo_#{field.to_s}"))
     end
   end
 
