@@ -8,14 +8,14 @@ module SeoInfo::ActiveRecord::ActiveRecordAdapter
       def has_seo options={}
 
         # we create the has_one relationship
-        has_one :seo_info, :class_name=>"SeoInfo::ActiveRecord::SeoInfo", :as => :seoable
+        has_one :seo_info, :class_name=>"SeoInfo::ActiveRecord::SeoInfo", :as => :seoable, :dependent => (options[:dependent] || :nullify)
 
         # we create methods for seo_hooks.
         # if a method name is passed we execute it, otherwise nil is returned
         unless options[:hooks].blank?
-          [:h1, :title, :description, :footer].each do |field|
+          SeoInfo::ActiveRecord::SeoInfo.seo_attribute_names.each do |field|
             define_method :"seo_#{field}" do
-              options[:hooks][field].blank? ? nil : self.send(options[:hooks][field])
+              options[:hooks][field.to_sym].blank? ? nil : self.send(options[:hooks][field.to_sym])
             end
           end
         end
