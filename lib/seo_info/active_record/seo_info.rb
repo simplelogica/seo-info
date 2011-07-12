@@ -23,6 +23,10 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
     define_method field do
       read_attribute(field) || (seoable.blank? ? nil : seoable.send(:"seo_#{field.to_s}"))
     end
+
+    define_method "default_#{field}" do
+      (seoable.blank? ? nil : seoable.send(:"seo_#{field.to_s}"))
+    end
   end
 
   def canonical_url
