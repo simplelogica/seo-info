@@ -10,8 +10,6 @@ module SeoInfo::ActionController::ActionControllerAdapter
         @seo ||= SeoInfo::ActiveRecord::SeoInfo.new :url => request.url
       end
 
-      before_filter :set_seo
-
     end
 
   end
