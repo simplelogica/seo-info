@@ -8,7 +8,7 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
     if params.blank?
       {:conditions => ["url = ?",path]}
     else
-      params = params.split("&") 
+      params = params.split("&").select{|p| @@ignored_url_params.detect{|ignored_param| p.start_with? ignored_param}.nil?}
       {:conditions => ["url LIKE ?" + (" AND url LIKE ? " * params.count), "#{path}?%"] + params.map{|p| "%?%#{p}%"}}
     end
     
@@ -24,6 +24,9 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
 
   @@classes = []
   cattr_accessor :classes
+
+  @@ignored_url_params = ["utm_medium","utm_source","utm_campaign","utm_content","utm_term"]
+  cattr_accessor :ignored_url_params
 
   def self.seo_attribute_names
     self.new.attribute_names - ["created_at", "seoable_id", "seoable_type", "updated_at"]
