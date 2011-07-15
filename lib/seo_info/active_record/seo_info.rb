@@ -9,7 +9,7 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
       {:conditions => ["url = ?",path]}
     else
       params = params.split("&").select{|p| @@ignored_url_params.detect{|ignored_param| p.start_with? ignored_param}.nil?}
-      {:conditions => ["url LIKE ?" + (" AND url LIKE ? " * params.count), "#{path}?%"] + params.map{|p| "%?%#{p}%"}}
+      {:conditions => ["url LIKE ?" + (" AND url LIKE ? " * params.length), "#{path}?%"] + params.map{|p| "%?%#{p}%"}}
     end
     
   }
