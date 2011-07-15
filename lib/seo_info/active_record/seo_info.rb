@@ -3,7 +3,17 @@ class SeoInfo::ActiveRecord::SeoInfo < ActiveRecord::Base
   belongs_to :seoable, :polymorphic => true
 
   named_scope :ordered_by_model, :order => "seoable_type ASC"
-  
+  named_scope :attached_to_url, lambda { |url| 
+    path, params = url.split("?")
+    if params.blank?
+      {:conditions => ["url = ?",path]}
+    else
+      params = params.split("&") 
+      {:conditions => ["url LIKE ?" + (" AND url LIKE ? " * params.count), "#{path}?%"] + params.map{|p| "%?%#{p}%"}}
+    end
+    
+  }
+
   validate :has_seoable_or_url
 
   def has_seoable_or_url
